@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nc_y7y)t3kpbho_q8!jr44f!s(^ige6f0=1gs5l-amuzp(0-i+'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG',cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -73,16 +74,39 @@ WSGI_APPLICATION = 'foodOnline_main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#DATABASES = {
+#   'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#       'NAME': BASE_DIR / 'foodOnline_db',
+#        'USER': 'postgres',
+#        'PASSWORD': 'Laksh@28',
+#        'HOST':'localhost',
+#        
+#    }
+#}
+import os  # Ensure this import is at the top
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': BASE_DIR / 'foodOnline_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Laksh@28',
-        'HOST':'localhost',
+        'NAME': config('DB_NAME'), 
+        'USER': config('DB_USER'), 
+        'PASSWORD': config('DB_PASSWORD'),  
+        'HOST': config('DB_HOST'),  
+        'PORT': config('DB_PORT'),  
     }
 }
 
+#DATABASES = {
+#   'default': {
+#       'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': str(os.getenv('DB_NAME', 'foodOnline_db')), 
+#        'USER': str(os.getenv('DB_USER', 'postgres')), 
+#        'PASSWORD': str(os.getenv('DB_PASSWORD', 'Laksh@28')),  
+#        'HOST': str(os.getenv('DB_HOST', 'localhost')),  
+#        'PORT': str(os.getenv('DB_PORT', '5432')),  
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
