@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -74,16 +75,7 @@ WSGI_APPLICATION = 'foodOnline_main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-#DATABASES = {
-#   'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#       'NAME': BASE_DIR / 'foodOnline_db',
-#        'USER': 'postgres',
-#        'PASSWORD': 'Laksh@28',
-#        'HOST':'localhost',
-#        
-#    }
-#}
+
 import os  # Ensure this import is at the top
 
 DATABASES = {
@@ -97,16 +89,7 @@ DATABASES = {
     }
 }
 
-#DATABASES = {
-#   'default': {
-#       'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': str(os.getenv('DB_NAME', 'foodOnline_db')), 
-#        'USER': str(os.getenv('DB_USER', 'postgres')), 
-#        'PASSWORD': str(os.getenv('DB_PASSWORD', 'Laksh@28')),  
-#        'HOST': str(os.getenv('DB_HOST', 'localhost')),  
-#        'PORT': str(os.getenv('DB_PORT', '5432')),  
-#    }
-#}
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -148,7 +131,17 @@ STATICFILES_DIRS = [
     'foodOnline_main/static'
 ]
 
+#Media files Configuration
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR /'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
