@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_vendor',
+                'accounts.context_processors.get_google_api',
             ],
         },
     },
@@ -127,11 +128,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR /'static'
 STATICFILES_DIRS = [
     'foodOnline_main/static'
 ]
+
+'''# Path to collect static files (for production)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Path where Django will look for static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'foodOnline_main', 'static'),
+]'''
 
 #Media files Configuration
 
@@ -158,9 +167,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <lakshmisb282003@gmail.com>'
 
-'''GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+GOOGLE_API_KEY = 'AIzaSyAKFROGt9nxu7DTzlRqLCMVGu1aE0OWIQg'
 
-if DEBUG == True:
+'''if DEBUG == True:
     os.environ['PATH'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
     os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
     GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\gdal304.dll')
