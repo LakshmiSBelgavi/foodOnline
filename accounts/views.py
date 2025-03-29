@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 from vendor.models import Vendor
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-
+from django.template.defaultfilters import slugify
 # Restrict the vendor from accessing the customer page
 def check_role_vendor(user):
     if user.role == 1:
@@ -77,10 +77,11 @@ def registerUser(request):
 def registerVendor(request):
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in!')
-        return redirect('dashboard')
+        return redirect('myAccount')
     elif request.method == 'POST':
-        form=UserForm(request.POST)
-        v_form=VendorForm(request.POST,request.FILES)
+        # store the data and create the user
+        form = UserForm(request.POST)
+        v_form = VendorForm(request.POST, request.FILES)
         if form.is_valid() and v_form.is_valid:
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -90,33 +91,38 @@ def registerVendor(request):
             user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
             user.role = User.VENDOR
             user.save()
+            
+            # ✅ Ensure UserProfile is Created
+            user_profile, created = UserProfile.objects.get_or_create(user=user)
+            
             vendor = v_form.save(commit=False)
             vendor.user = user
             vendor_name = v_form.cleaned_data['vendor_name']
-            #vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id)
-            user_profile = UserProfile.objects.get(user=user)
+            vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id)
+            #user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
-            
+
             # Send verification email
-            mail_subject='Please activate your account'
+            mail_subject = 'Please activate your account'
             email_template = 'accounts/emails/account_verification_email.html'
-            send_verification_email(request,user,mail_subject,email_template)
-            
+            send_verification_email(request, user, mail_subject, email_template)
+
             messages.success(request, 'Your account has been registered sucessfully! Please wait for the approval.')
             return redirect('registerVendor')
         else:
-            print("INVALID FORM")
+            print('invalid form')
             print(form.errors)
     else:
-        form=UserForm()
-        v_form=VendorForm()
-    
-    context={
-        'form':form,
-        'v_form':v_form,
+        form = UserForm()
+        v_form = VendorForm()
+
+    context = {
+        'form': form,
+        'v_form': v_form,
     }
-    return render(request,'accounts/registerVendor.html',context)
+
+    return render(request, 'accounts/registerVendor.html', context)
 
 def activate(request, uidb64, token):
     # Activate the user by setting the is_active status to True
