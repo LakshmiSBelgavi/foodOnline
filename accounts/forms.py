@@ -39,8 +39,8 @@ class UserProfileForm(forms.ModelForm):
 #                 self.fields[field].widget.attrs['readonly'] = 'readonly'
 
 
-# class UserInfoForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'phone_number']
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number']
 

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'menu',
     'marketplace',
     'django.contrib.gis',
+    'customers',
+    'orders',
     
 ]
 
@@ -74,6 +76,7 @@ TEMPLATES = [
                 'accounts.context_processors.get_google_api',
                 'marketplace.context_processors.get_cart_counter',
                 'marketplace.context_processors.get_cart_amounts',
+                'accounts.context_processors.get_user_profile',
             ],
         },
     },
@@ -175,7 +178,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <lakshmisb282003@gmail.com>'
 
-GOOGLE_API_KEY = 'AIzaSyAKFROGt9nxu7DTzlRqLCMVGu1aE0OWIQg'
+GOOGLE_API_KEY = config('GOOGLE_API_KEY')
 
 
 
@@ -185,9 +188,9 @@ os.environ['PATH'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo') + ';'
 os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
 GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\gdal.dll')
 
-'''PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+'''PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')'''
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
-RZP_KEY_ID = config('RZP_KEY_ID')
+'''RZP_KEY_ID = config('RZP_KEY_ID')
 RZP_KEY_SECRET = config('RZP_KEY_SECRET')'''
