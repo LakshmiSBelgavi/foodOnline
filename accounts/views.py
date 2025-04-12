@@ -13,6 +13,8 @@ from vendor.models import Vendor
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.template.defaultfilters import slugify
+
+from orders.models import Order
 # Restrict the vendor from accessing the customer page
 def check_role_vendor(user):
     if user.role == 1:
@@ -144,7 +146,7 @@ def activate(request, uidb64, token):
 
 
 def login(request):
-       
+
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in!')
         return redirect('myAccount')
@@ -167,7 +169,7 @@ def logout(request):
     auth.logout(request)
     messages.info(request, 'You are logged out.')
     return redirect('login')
- 
+
 @login_required(login_url='login')
 def myAccount(request):
     user = request.user
@@ -177,7 +179,12 @@ def myAccount(request):
 @login_required(login_url='login')   
 @user_passes_test(check_role_customer)
 def custDashboard(request):
-    return render(request,'accounts/custDashboard.html')
+    orders = Order.objects.filter(user=request.user,is_ordered=True)
+    context={
+        'orders':orders,
+        'orders_count':orders.count(),
+    }
+    return render(request,'accounts/custDashboard.html',context)
 
 
 @login_required(login_url='login')
@@ -214,7 +221,7 @@ def vendorDashboard(request):
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST['email']
-           
+
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email__exact=email)
 
@@ -264,4 +271,3 @@ def reset_password(request):
             messages.error(request, 'Password do not match!')
             return redirect('reset_password')
     return render(request, 'accounts/reset_password.html')
-   
